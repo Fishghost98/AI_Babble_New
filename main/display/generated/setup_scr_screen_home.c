@@ -117,7 +117,7 @@ void setup_scr_screen_home(lv_ui *ui)
     ui->screen_home_animimg_1 = lv_animimg_create(ui->screen_home);
     lv_obj_set_pos(ui->screen_home_animimg_1, 140, 240);
     lv_obj_set_size(ui->screen_home_animimg_1, 80, 80);
-    lv_animimg_set_src(ui->screen_home_animimg_1, (const void **) screen_home_animimg_1_imgs, 80);
+    // lv_animimg_set_src(ui->screen_home_animimg_1, (const void **) screen_home_animimg_1_imgs, 80);
     lv_animimg_set_duration(ui->screen_home_animimg_1, 30*80);
     lv_animimg_set_repeat_count(ui->screen_home_animimg_1, LV_ANIM_REPEAT_INFINITE);
     lv_animimg_start(ui->screen_home_animimg_1);

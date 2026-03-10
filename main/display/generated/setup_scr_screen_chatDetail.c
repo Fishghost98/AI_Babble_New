@@ -58,7 +58,7 @@ void setup_scr_screen_chatDetail(lv_ui *ui)
     ui->screen_chatDetail_animimg_1 = lv_animimg_create(ui->screen_chatDetail);
     lv_obj_set_pos(ui->screen_chatDetail_animimg_1, 80, 45);
     lv_obj_set_size(ui->screen_chatDetail_animimg_1, 200, 200);
-    lv_animimg_set_src(ui->screen_chatDetail_animimg_1, (const void **) screen_chatDetail_animimg_1_imgs, 80);
+    // lv_animimg_set_src(ui->screen_chatDetail_animimg_1, (const void **) screen_chatDetail_animimg_1_imgs, 80);
     lv_animimg_set_duration(ui->screen_chatDetail_animimg_1, 30*80);
     lv_animimg_set_repeat_count(ui->screen_chatDetail_animimg_1, LV_ANIM_REPEAT_INFINITE);
     lv_animimg_start(ui->screen_chatDetail_animimg_1);

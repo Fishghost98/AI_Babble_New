@@ -27,7 +27,7 @@ void setup_scr_screen_gif_display(lv_ui *ui)
     lv_obj_set_style_bg_opa(ui->screen_gif_display, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui->screen_gif_display, lv_color_hex(0x000000), LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_bg_grad_dir(ui->screen_gif_display, LV_GRAD_DIR_NONE, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_image_src(ui->screen_gif_display, &_bk2_RGB565A8_360x360, LV_PART_MAIN|LV_STATE_DEFAULT);
+    // lv_obj_set_style_bg_image_src(ui->screen_gif_display, &_bk2_RGB565A8_360x360, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_opa(ui->screen_gif_display, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor_opa(ui->screen_gif_display, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
 
