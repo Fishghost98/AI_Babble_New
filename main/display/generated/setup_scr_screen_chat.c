@@ -27,16 +27,16 @@ void setup_scr_screen_chat(lv_ui *ui)
     lv_obj_set_style_bg_opa(ui->screen_chat, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui->screen_chat, lv_color_hex(0x000000), LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_bg_grad_dir(ui->screen_chat, LV_GRAD_DIR_NONE, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_img_src(ui->screen_chat, &_bk2_360x360, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_img_opa(ui->screen_chat, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_img_recolor_opa(ui->screen_chat, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_src(ui->screen_chat, &_bk2_RGB565A8_360x360, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_opa(ui->screen_chat, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_recolor_opa(ui->screen_chat, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
 
     //Write codes screen_chat_label_1
     ui->screen_chat_label_1 = lv_label_create(ui->screen_chat);
-    lv_label_set_text(ui->screen_chat_label_1, "AI语伴");
-    lv_label_set_long_mode(ui->screen_chat_label_1, LV_LABEL_LONG_WRAP);
     lv_obj_set_pos(ui->screen_chat_label_1, 130, 250);
     lv_obj_set_size(ui->screen_chat_label_1, 100, 32);
+    lv_label_set_text(ui->screen_chat_label_1, "AI语伴");
+    lv_label_set_long_mode(ui->screen_chat_label_1, LV_LABEL_LONG_WRAP);
 
     //Write style for screen_chat_label_1, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
     lv_obj_set_style_border_width(ui->screen_chat_label_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
@@ -55,64 +55,56 @@ void setup_scr_screen_chat(lv_ui *ui)
     lv_obj_set_style_shadow_width(ui->screen_chat_label_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
 
     //Write codes screen_chat_img_1
-    ui->screen_chat_img_1 = lv_img_create(ui->screen_chat);
-    lv_obj_add_flag(ui->screen_chat_img_1, LV_OBJ_FLAG_CLICKABLE);
-    lv_img_set_src(ui->screen_chat_img_1, &_chat1_alpha_150x150);
-    lv_img_set_pivot(ui->screen_chat_img_1, 50,50);
-    lv_img_set_angle(ui->screen_chat_img_1, 0);
+    ui->screen_chat_img_1 = lv_image_create(ui->screen_chat);
     lv_obj_set_pos(ui->screen_chat_img_1, 105, 70);
     lv_obj_set_size(ui->screen_chat_img_1, 150, 150);
+    lv_obj_add_flag(ui->screen_chat_img_1, LV_OBJ_FLAG_CLICKABLE);
+    lv_image_set_src(ui->screen_chat_img_1, &_chat1_RGB565A8_150x150);
+    lv_image_set_pivot(ui->screen_chat_img_1, 50,50);
+    lv_image_set_rotation(ui->screen_chat_img_1, 0);
 
     //Write style for screen_chat_img_1, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
-    lv_obj_set_style_img_recolor_opa(ui->screen_chat_img_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_img_opa(ui->screen_chat_img_1, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_radius(ui->screen_chat_img_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_clip_corner(ui->screen_chat_img_1, true, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_image_recolor_opa(ui->screen_chat_img_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_image_opa(ui->screen_chat_img_1, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
 
     //Write codes screen_chat_img_2
-    ui->screen_chat_img_2 = lv_img_create(ui->screen_chat);
-    lv_obj_add_flag(ui->screen_chat_img_2, LV_OBJ_FLAG_CLICKABLE);
-    lv_img_set_src(ui->screen_chat_img_2, &_right2_alpha_75x290);
-    lv_img_set_pivot(ui->screen_chat_img_2, 50,50);
-    lv_img_set_angle(ui->screen_chat_img_2, 0);
+    ui->screen_chat_img_2 = lv_image_create(ui->screen_chat);
     lv_obj_set_pos(ui->screen_chat_img_2, 285, 35);
     lv_obj_set_size(ui->screen_chat_img_2, 75, 290);
+    lv_obj_add_flag(ui->screen_chat_img_2, LV_OBJ_FLAG_CLICKABLE);
+    lv_image_set_src(ui->screen_chat_img_2, &_right2_RGB565A8_75x290);
+    lv_image_set_pivot(ui->screen_chat_img_2, 50,50);
+    lv_image_set_rotation(ui->screen_chat_img_2, 0);
 
     //Write style for screen_chat_img_2, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
-    lv_obj_set_style_img_recolor_opa(ui->screen_chat_img_2, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_img_opa(ui->screen_chat_img_2, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_radius(ui->screen_chat_img_2, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_clip_corner(ui->screen_chat_img_2, true, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_image_recolor_opa(ui->screen_chat_img_2, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_image_opa(ui->screen_chat_img_2, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
 
     //Write codes screen_chat_img_3
-    ui->screen_chat_img_3 = lv_img_create(ui->screen_chat);
-    lv_obj_add_flag(ui->screen_chat_img_3, LV_OBJ_FLAG_CLICKABLE);
-    lv_img_set_src(ui->screen_chat_img_3, &_left1_alpha_75x290);
-    lv_img_set_pivot(ui->screen_chat_img_3, 50,50);
-    lv_img_set_angle(ui->screen_chat_img_3, 0);
+    ui->screen_chat_img_3 = lv_image_create(ui->screen_chat);
     lv_obj_set_pos(ui->screen_chat_img_3, 0, 35);
     lv_obj_set_size(ui->screen_chat_img_3, 75, 290);
+    lv_obj_add_flag(ui->screen_chat_img_3, LV_OBJ_FLAG_CLICKABLE);
+    lv_image_set_src(ui->screen_chat_img_3, &_left1_RGB565A8_75x290);
+    lv_image_set_pivot(ui->screen_chat_img_3, 50,50);
+    lv_image_set_rotation(ui->screen_chat_img_3, 0);
 
     //Write style for screen_chat_img_3, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
-    lv_obj_set_style_img_recolor_opa(ui->screen_chat_img_3, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_img_opa(ui->screen_chat_img_3, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_radius(ui->screen_chat_img_3, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_clip_corner(ui->screen_chat_img_3, true, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_image_recolor_opa(ui->screen_chat_img_3, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_image_opa(ui->screen_chat_img_3, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
 
     //Write codes screen_chat_img_4
-    ui->screen_chat_img_4 = lv_img_create(ui->screen_chat);
-    lv_obj_add_flag(ui->screen_chat_img_4, LV_OBJ_FLAG_CLICKABLE);
-    lv_img_set_src(ui->screen_chat_img_4, &_dot2_alpha_50x6);
-    lv_img_set_pivot(ui->screen_chat_img_4, 50,50);
-    lv_img_set_angle(ui->screen_chat_img_4, 0);
+    ui->screen_chat_img_4 = lv_image_create(ui->screen_chat);
     lv_obj_set_pos(ui->screen_chat_img_4, 155, 330);
     lv_obj_set_size(ui->screen_chat_img_4, 50, 6);
+    lv_obj_add_flag(ui->screen_chat_img_4, LV_OBJ_FLAG_CLICKABLE);
+    lv_image_set_src(ui->screen_chat_img_4, &_dot2_RGB565A8_50x6);
+    lv_image_set_pivot(ui->screen_chat_img_4, 50,50);
+    lv_image_set_rotation(ui->screen_chat_img_4, 0);
 
     //Write style for screen_chat_img_4, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
-    lv_obj_set_style_img_recolor_opa(ui->screen_chat_img_4, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_img_opa(ui->screen_chat_img_4, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_radius(ui->screen_chat_img_4, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_clip_corner(ui->screen_chat_img_4, true, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_image_recolor_opa(ui->screen_chat_img_4, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_image_opa(ui->screen_chat_img_4, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
 
     //The custom code of screen_chat.
 

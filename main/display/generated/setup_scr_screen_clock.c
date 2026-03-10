@@ -1,5 +1,5 @@
 /*
-* Copyright 2025 NXP
+* Copyright 2026 NXP
 * NXP Proprietary. This software is owned or controlled by NXP and may only be used strictly in
 * accordance with the applicable license terms. By expressly accepting such terms or by downloading, installing,
 * activating and/or otherwise using the software, you are agreeing that you have read, and that you agree to
@@ -27,44 +27,45 @@ void setup_scr_screen_clock(lv_ui *ui)
     lv_obj_set_style_bg_opa(ui->screen_clock, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui->screen_clock, lv_color_hex(0x000000), LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_bg_grad_dir(ui->screen_clock, LV_GRAD_DIR_NONE, LV_PART_MAIN|LV_STATE_DEFAULT);
-
-    //Write codes screen_clock_label_1
-    ui->screen_clock_label_1 = lv_label_create(ui->screen_clock);
-    lv_label_set_text(ui->screen_clock_label_1, "时钟");
-    lv_label_set_long_mode(ui->screen_clock_label_1, LV_LABEL_LONG_WRAP);
-    lv_obj_set_pos(ui->screen_clock_label_1, 113, 260);
-    lv_obj_set_size(ui->screen_clock_label_1, 140, 35);
-
-    //Write style for screen_clock_label_1, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
-    lv_obj_set_style_border_width(ui->screen_clock_label_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_radius(ui->screen_clock_label_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_text_color(ui->screen_clock_label_1, lv_color_hex(0xffffff), LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_text_font(ui->screen_clock_label_1, &lv_font_ZiTiQuanWeiJunHeiW22_32, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_text_opa(ui->screen_clock_label_1, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_text_letter_space(ui->screen_clock_label_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_text_line_space(ui->screen_clock_label_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_text_align(ui->screen_clock_label_1, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_bg_opa(ui->screen_clock_label_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_top(ui->screen_clock_label_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_right(ui->screen_clock_label_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_bottom(ui->screen_clock_label_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_pad_left(ui->screen_clock_label_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_width(ui->screen_clock_label_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_src(ui->screen_clock, &_bk2_RGB565A8_360x360, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_opa(ui->screen_clock, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_recolor_opa(ui->screen_clock, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
 
     //Write codes screen_clock_img_1
-    ui->screen_clock_img_1 = lv_img_create(ui->screen_clock);
-    lv_img_set_src(ui->screen_clock_img_1, &_analog_img_alpha_180x180);
-    lv_obj_add_flag(ui->screen_clock_img_1, LV_OBJ_FLAG_CLICKABLE);
-    lv_img_set_pivot(ui->screen_clock_img_1, 50,50);
-    lv_img_set_angle(ui->screen_clock_img_1, 0);
+    ui->screen_clock_img_1 = lv_image_create(ui->screen_clock);
     lv_obj_set_pos(ui->screen_clock_img_1, 90, 70);
     lv_obj_set_size(ui->screen_clock_img_1, 180, 180);
+    lv_obj_add_flag(ui->screen_clock_img_1, LV_OBJ_FLAG_CLICKABLE);
+    lv_image_set_src(ui->screen_clock_img_1, &_analog_img_RGB565A8_180x180_RLE);
+    lv_image_set_pivot(ui->screen_clock_img_1, 50,50);
+    lv_image_set_rotation(ui->screen_clock_img_1, 0);
 
     //Write style for screen_clock_img_1, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
-    lv_obj_set_style_img_recolor_opa(ui->screen_clock_img_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_img_opa(ui->screen_clock_img_1, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_radius(ui->screen_clock_img_1, 150, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_clip_corner(ui->screen_clock_img_1, true, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_image_recolor_opa(ui->screen_clock_img_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_image_opa(ui->screen_clock_img_1, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
+
+    //Write codes screen_clock_screen_systemConfig1
+    ui->screen_clock_screen_systemConfig1 = lv_label_create(ui->screen_clock);
+    lv_obj_set_pos(ui->screen_clock_screen_systemConfig1, 113, 260);
+    lv_obj_set_size(ui->screen_clock_screen_systemConfig1, 140, 35);
+    lv_label_set_text(ui->screen_clock_screen_systemConfig1, "时钟");
+    lv_label_set_long_mode(ui->screen_clock_screen_systemConfig1, LV_LABEL_LONG_WRAP);
+
+    //Write style for screen_clock_screen_systemConfig1, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
+    lv_obj_set_style_border_width(ui->screen_clock_screen_systemConfig1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_radius(ui->screen_clock_screen_systemConfig1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_text_color(ui->screen_clock_screen_systemConfig1, lv_color_hex(0xffffff), LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_text_font(ui->screen_clock_screen_systemConfig1, &lv_font_ZiTiQuanWeiJunHeiW22_32, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_text_opa(ui->screen_clock_screen_systemConfig1, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_text_letter_space(ui->screen_clock_screen_systemConfig1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_text_line_space(ui->screen_clock_screen_systemConfig1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_text_align(ui->screen_clock_screen_systemConfig1, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui->screen_clock_screen_systemConfig1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_top(ui->screen_clock_screen_systemConfig1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_right(ui->screen_clock_screen_systemConfig1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_bottom(ui->screen_clock_screen_systemConfig1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_pad_left(ui->screen_clock_screen_systemConfig1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui->screen_clock_screen_systemConfig1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
 
     //The custom code of screen_clock.
 

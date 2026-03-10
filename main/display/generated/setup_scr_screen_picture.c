@@ -1,5 +1,5 @@
 /*
-* Copyright 2025 NXP
+* Copyright 2026 NXP
 * NXP Proprietary. This software is owned or controlled by NXP and may only be used strictly in
 * accordance with the applicable license terms. By expressly accepting such terms or by downloading, installing,
 * activating and/or otherwise using the software, you are agreeing that you have read, and that you agree to
@@ -27,13 +27,29 @@ void setup_scr_screen_picture(lv_ui *ui)
     lv_obj_set_style_bg_opa(ui->screen_picture, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui->screen_picture, lv_color_hex(0x000000), LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_bg_grad_dir(ui->screen_picture, LV_GRAD_DIR_NONE, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_src(ui->screen_picture, &_bk2_RGB565A8_360x360, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_opa(ui->screen_picture, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_image_recolor_opa(ui->screen_picture, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+
+    //Write codes screen_picture_img_1
+    ui->screen_picture_img_1 = lv_image_create(ui->screen_picture);
+    lv_obj_set_pos(ui->screen_picture_img_1, 90, 70);
+    lv_obj_set_size(ui->screen_picture_img_1, 180, 180);
+    lv_obj_add_flag(ui->screen_picture_img_1, LV_OBJ_FLAG_CLICKABLE);
+    lv_image_set_src(ui->screen_picture_img_1, &_main_RGB565A8_180x180_RLE);
+    lv_image_set_pivot(ui->screen_picture_img_1, 50,50);
+    lv_image_set_rotation(ui->screen_picture_img_1, 0);
+
+    //Write style for screen_picture_img_1, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
+    lv_obj_set_style_image_recolor_opa(ui->screen_picture_img_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_image_opa(ui->screen_picture_img_1, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
 
     //Write codes screen_picture_label_1
     ui->screen_picture_label_1 = lv_label_create(ui->screen_picture);
-    lv_label_set_text(ui->screen_picture_label_1, "图片");
-    lv_label_set_long_mode(ui->screen_picture_label_1, LV_LABEL_LONG_WRAP);
     lv_obj_set_pos(ui->screen_picture_label_1, 113, 260);
     lv_obj_set_size(ui->screen_picture_label_1, 140, 35);
+    lv_label_set_text(ui->screen_picture_label_1, "图片");
+    lv_label_set_long_mode(ui->screen_picture_label_1, LV_LABEL_LONG_WRAP);
 
     //Write style for screen_picture_label_1, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
     lv_obj_set_style_border_width(ui->screen_picture_label_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
@@ -50,21 +66,6 @@ void setup_scr_screen_picture(lv_ui *ui)
     lv_obj_set_style_pad_bottom(ui->screen_picture_label_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_pad_left(ui->screen_picture_label_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_width(ui->screen_picture_label_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-
-    //Write codes screen_picture_img_1
-    ui->screen_picture_img_1 = lv_img_create(ui->screen_picture);
-    lv_obj_add_flag(ui->screen_picture_img_1, LV_OBJ_FLAG_CLICKABLE);
-    lv_img_set_src(ui->screen_picture_img_1, &_main_alpha_180x180);
-    lv_img_set_pivot(ui->screen_picture_img_1, 50,50);
-    lv_img_set_angle(ui->screen_picture_img_1, 0);
-    lv_obj_set_pos(ui->screen_picture_img_1, 90, 70);
-    lv_obj_set_size(ui->screen_picture_img_1, 180, 180);
-
-    //Write style for screen_picture_img_1, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
-    lv_obj_set_style_img_recolor_opa(ui->screen_picture_img_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_img_opa(ui->screen_picture_img_1, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_radius(ui->screen_picture_img_1, 150, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_clip_corner(ui->screen_picture_img_1, true, LV_PART_MAIN|LV_STATE_DEFAULT);
 
     //The custom code of screen_picture.
 
