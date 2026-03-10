@@ -41,7 +41,7 @@ set(SOURCES "audio/audio_codec.cc"
             "main.cc"
             )
 
-set(INCLUDE_DIRS "." "display" "display/lvgl_display" "display/lvgl_display/jpg" "display/custom" "display/generated" "display/generated/guider_customer_fonts" "audio" "protocols")
+set(INCLUDE_DIRS "." "bable" "bable/PCF85063" "display" "display/lvgl_display" "display/lvgl_display/jpg" "display/custom" "display/generated" "display/generated/guider_customer_fonts" "audio" "protocols")
 
 # Add board common files
 list(APPEND SOURCES

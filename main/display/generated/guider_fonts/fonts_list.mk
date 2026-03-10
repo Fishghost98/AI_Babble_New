@@ -1,1 +1,1 @@
-GEN_CSRCS +=
+GEN_CSRCS += lv_font_ZiTiQuanWeiJunHeiW22_23.c lv_font_montserratMedium_16.c lv_font_ZiTiQuanWeiJunHeiW22_19.c lv_font_ZiTiQuanWeiJunHeiW22_32.c lv_font_montserratMedium_20.c lv_font_ZiTiQuanWeiJunHeiW22_20.c lv_font_ZiTiQuanWeiJunHeiW22_16.c lv_font_montserratMedium_14.c lv_font_montserratMedium_50.c lv_font_ZiTiQuanWeiJunHeiW22_30.c lv_font_ZiTiQuanWeiJunHeiW22_12.c lv_font_ZiTiQuanWeiJunHeiW22_13.c
