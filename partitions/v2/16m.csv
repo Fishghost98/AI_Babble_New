@@ -3,6 +3,6 @@
 nvs,      data, nvs,     0x9000,    0x4000,
 otadata,  data, ota,     0xd000,    0x2000,
 phy_init, data, phy,     0xf000,    0x1000,
-ota_0,    app,  ota_0,   0x20000,   0xa90000,
+ota_0,    app,  ota_0,   0x20000,   0xb90000,
 # ota_1,    app,  ota_1,   ,          0x75000,
 assets,   data, spiffs,  ,          1M
