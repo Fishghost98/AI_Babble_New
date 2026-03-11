@@ -10,7 +10,8 @@
 #include "events_init.h"
 #include <stdio.h>
 #include "lvgl.h"
-
+#include "board.h"
+#include "Commons.h"
 #if LV_USE_GUIDER_SIMULATOR && LV_USE_FREEMASTER
 #include "freemaster_client.h"
 #endif
@@ -39,6 +40,12 @@ static void screen_mainConfig_event_handler (lv_event_t *e)
         {
             lv_indev_wait_release(lv_indev_active());
             ui_load_scr_animation(&guider_ui, &guider_ui.screen_systemConfig, guider_ui.screen_systemConfig_del, &guider_ui.screen_mainConfig_del, setup_scr_screen_systemConfig, LV_SCR_LOAD_ANIM_NONE, 200, 200, false, true);
+            break;
+        }
+        case LV_DIR_BOTTOM:
+        {
+            lv_indev_wait_release(lv_indev_active());
+            ui_load_scr_animation(&guider_ui, &guider_ui.screen_main, guider_ui.screen_main_del, &guider_ui.screen_mainConfig_del, setup_scr_screen_main, LV_SCR_LOAD_ANIM_NONE, 200, 200, false, true);
             break;
         }
         default:
@@ -334,6 +341,10 @@ static void screen_quick_config_slider_backLight_event_handler (lv_event_t *e)
     switch (code) {
     case LV_EVENT_VALUE_CHANGED:
     {
+        auto& board = Board::GetInstance();
+        lv_obj_t *slider = static_cast<lv_obj_t*>(lv_event_get_target(e));
+        uint8_t Backlight = lv_slider_get_value(slider);
+        board.GetBacklight()->SetBrightness(Backlight, true);
         break;
     }
     default:
@@ -451,6 +462,30 @@ void events_init_screen_picture (lv_ui *ui)
     lv_obj_add_event_cb(ui->screen_picture_img_1, screen_picture_img_1_event_handler, LV_EVENT_ALL, ui);
 }
 
+static void screen_picture_display_event_handler (lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    switch (code) {
+    case LV_EVENT_GESTURE:
+    {
+        lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_active());
+        switch(dir) {
+        case LV_DIR_BOTTOM:
+        {
+            lv_indev_wait_release(lv_indev_active());
+            ui_load_scr_animation(&guider_ui, &guider_ui.screen_picture, guider_ui.screen_picture_del, &guider_ui.screen_picture_display_del, setup_scr_screen_picture, LV_SCR_LOAD_ANIM_NONE, 200, 200, false, true);
+            break;
+        }
+        default:
+            break;
+        }
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 static void screen_picture_display_img_display_event_handler (lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
@@ -480,8 +515,33 @@ static void screen_picture_display_list_1_event_handler (lv_event_t *e)
 
 void events_init_screen_picture_display (lv_ui *ui)
 {
+    lv_obj_add_event_cb(ui->screen_picture_display, screen_picture_display_event_handler, LV_EVENT_ALL, ui);
     lv_obj_add_event_cb(ui->screen_picture_display_img_display, screen_picture_display_img_display_event_handler, LV_EVENT_ALL, ui);
     lv_obj_add_event_cb(ui->screen_picture_display_list_1, screen_picture_display_list_1_event_handler, LV_EVENT_ALL, ui);
+}
+
+static void screen_gif_display_event_handler (lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    switch (code) {
+    case LV_EVENT_GESTURE:
+    {
+        lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_active());
+        switch(dir) {
+        case LV_DIR_BOTTOM:
+        {
+            lv_indev_wait_release(lv_indev_active());
+            ui_load_scr_animation(&guider_ui, &guider_ui.screen_gif, guider_ui.screen_gif_del, &guider_ui.screen_gif_display_del, setup_scr_screen_gif, LV_SCR_LOAD_ANIM_NONE, 200, 200, false, true);
+            break;
+        }
+        default:
+            break;
+        }
+        break;
+    }
+    default:
+        break;
+    }
 }
 
 static void screen_gif_display_img_display_event_handler (lv_event_t *e)
@@ -513,6 +573,7 @@ static void screen_gif_display_list_1_event_handler (lv_event_t *e)
 
 void events_init_screen_gif_display (lv_ui *ui)
 {
+    lv_obj_add_event_cb(ui->screen_gif_display, screen_gif_display_event_handler, LV_EVENT_ALL, ui);
     lv_obj_add_event_cb(ui->screen_gif_display_img_display, screen_gif_display_img_display_event_handler, LV_EVENT_ALL, ui);
     lv_obj_add_event_cb(ui->screen_gif_display_list_1, screen_gif_display_list_1_event_handler, LV_EVENT_ALL, ui);
 }
@@ -620,7 +681,45 @@ void events_init_screen_clock (lv_ui *ui)
     lv_obj_add_event_cb(ui->screen_clock_img_1, screen_clock_img_1_event_handler, LV_EVENT_ALL, ui);
 }
 
+static void screen_systemConfig1_event_handler (lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    switch (code) {
+    case LV_EVENT_GESTURE:
+    {
+        lv_dir_t dir = lv_indev_get_gesture_dir(lv_indev_active());
+        switch(dir) {
+        case LV_DIR_RIGHT:
+        {
+            lv_indev_wait_release(lv_indev_active());
+            ui_load_scr_animation(&guider_ui, &guider_ui.screen_systemConfig, guider_ui.screen_systemConfig_del, &guider_ui.screen_systemConfig1_del, setup_scr_screen_systemConfig, LV_SCR_LOAD_ANIM_NONE, 200, 200, false, true);
+            break;
+        }
+        default:
+            break;
+        }
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 static void screen_systemConfig1_cont_2_event_handler (lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    switch (code) {
+    case LV_EVENT_CLICKED:
+    {
+        ui_load_scr_animation(&guider_ui, &guider_ui.screen_autoShutDown, guider_ui.screen_autoShutDown_del, &guider_ui.screen_systemConfig1_del, setup_scr_screen_autoShutDown, LV_SCR_LOAD_ANIM_NONE, 200, 200, false, true);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+static void screen_systemConfig1_cont_1_event_handler (lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     switch (code) {
@@ -647,7 +746,34 @@ static void screen_systemConfig1_cont_4_event_handler (lv_event_t *e)
     }
 }
 
+static void screen_systemConfig1_cont_5_event_handler (lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    switch (code) {
+    case LV_EVENT_CLICKED:
+    {
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 static void screen_systemConfig1_cont_6_event_handler (lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    switch (code) {
+    case LV_EVENT_CLICKED:
+    {
+        ui_load_scr_animation(&guider_ui, &guider_ui.screen_reset, guider_ui.screen_reset_del, &guider_ui.screen_systemConfig1_del, setup_scr_screen_reset, LV_SCR_LOAD_ANIM_NONE, 200, 200, false, true);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
+static void screen_systemConfig1_cont_7_event_handler (lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     switch (code) {
@@ -675,12 +801,31 @@ static void screen_systemConfig1_cont_8_event_handler (lv_event_t *e)
     }
 }
 
+static void screen_systemConfig1_cont_9_event_handler (lv_event_t *e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    switch (code) {
+    case LV_EVENT_CLICKED:
+    {
+        ui_load_scr_animation(&guider_ui, &guider_ui.screen_device_information, guider_ui.screen_device_information_del, &guider_ui.screen_systemConfig1_del, setup_scr_screen_device_information, LV_SCR_LOAD_ANIM_NONE, 200, 200, false, true);
+        break;
+    }
+    default:
+        break;
+    }
+}
+
 void events_init_screen_systemConfig1 (lv_ui *ui)
 {
+    lv_obj_add_event_cb(ui->screen_systemConfig1, screen_systemConfig1_event_handler, LV_EVENT_ALL, ui);
     lv_obj_add_event_cb(ui->screen_systemConfig1_cont_2, screen_systemConfig1_cont_2_event_handler, LV_EVENT_ALL, ui);
+    lv_obj_add_event_cb(ui->screen_systemConfig1_cont_1, screen_systemConfig1_cont_1_event_handler, LV_EVENT_ALL, ui);
     lv_obj_add_event_cb(ui->screen_systemConfig1_cont_4, screen_systemConfig1_cont_4_event_handler, LV_EVENT_ALL, ui);
+    lv_obj_add_event_cb(ui->screen_systemConfig1_cont_5, screen_systemConfig1_cont_5_event_handler, LV_EVENT_ALL, ui);
     lv_obj_add_event_cb(ui->screen_systemConfig1_cont_6, screen_systemConfig1_cont_6_event_handler, LV_EVENT_ALL, ui);
+    lv_obj_add_event_cb(ui->screen_systemConfig1_cont_7, screen_systemConfig1_cont_7_event_handler, LV_EVENT_ALL, ui);
     lv_obj_add_event_cb(ui->screen_systemConfig1_cont_8, screen_systemConfig1_cont_8_event_handler, LV_EVENT_ALL, ui);
+    lv_obj_add_event_cb(ui->screen_systemConfig1_cont_9, screen_systemConfig1_cont_9_event_handler, LV_EVENT_ALL, ui);
 }
 
 static void screen_autoShutDown_list_1_item0_event_handler (lv_event_t *e)
@@ -933,10 +1078,10 @@ static void home_digital_event_handler (lv_event_t *e)
     switch (code) {
     case LV_EVENT_SCREEN_LOADED:
     {
-        lv_obj_set_x(guider_ui.home_digital_label_hour, 122);
-        lv_obj_set_y(guider_ui.home_digital_label_hour, 82);
-        lv_obj_set_x(guider_ui.home_digital_label_min, 122);
-        lv_obj_set_y(guider_ui.home_digital_label_min, 208);
+        ui_animation(guider_ui.home_digital_label_hour, 0, 800, lv_obj_get_x(guider_ui.home_digital_label_hour), 122, &lv_anim_path_bounce, 0, 0, 0, 0, (lv_anim_exec_xcb_t)lv_obj_set_x, NULL, NULL, NULL);
+        ui_animation(guider_ui.home_digital_label_hour, 0, 800, lv_obj_get_y(guider_ui.home_digital_label_hour), 82, &lv_anim_path_bounce, 0, 0, 0, 0, (lv_anim_exec_xcb_t)lv_obj_set_y, NULL, NULL, NULL);
+        ui_animation(guider_ui.home_digital_label_min, 800, 0, lv_obj_get_x(guider_ui.home_digital_label_min), 122, &lv_anim_path_bounce, 0, 0, 0, 0, (lv_anim_exec_xcb_t)lv_obj_set_x, NULL, NULL, NULL);
+        ui_animation(guider_ui.home_digital_label_min, 0, 800, lv_obj_get_y(guider_ui.home_digital_label_min), 208, &lv_anim_path_bounce, 0, 0, 0, 0, (lv_anim_exec_xcb_t)lv_obj_set_y, NULL, NULL, NULL);
         break;
     }
     case LV_EVENT_GESTURE:

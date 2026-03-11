@@ -410,6 +410,7 @@ LV_IMAGE_DECLARE(_img_clockwise_sec_RGB565A8_180x31);
 LV_IMAGE_DECLARE(_icn_flash_blue_RGB565A8_15x19);
 
 LV_IMAGE_DECLARE(_img_bg_digital_RGB565A8_360x360);
+LV_IMAGE_DECLARE(_img_menu_RGB565A8_10x127);
 LV_IMAGE_DECLARE(screen_chatDetail_animimg_1gif1_00_RLE);
 LV_IMAGE_DECLARE(screen_chatDetail_animimg_1gif1_01_RLE);
 LV_IMAGE_DECLARE(screen_chatDetail_animimg_1gif1_02_RLE);

@@ -149,11 +149,12 @@ void setup_scr_home_digital(lv_ui *ui)
 
     //Write codes home_digital_img_1
     ui->home_digital_img_1 = lv_image_create(ui->home_digital);
-    lv_obj_set_pos(ui->home_digital_img_1, 335, 128);
+    lv_obj_set_pos(ui->home_digital_img_1, 333, 124);
     lv_obj_set_size(ui->home_digital_img_1, 10, 127);
     lv_obj_add_flag(ui->home_digital_img_1, LV_OBJ_FLAG_CLICKABLE);
+    lv_image_set_src(ui->home_digital_img_1, &_img_menu_RGB565A8_10x127);
     lv_image_set_pivot(ui->home_digital_img_1, 50,50);
-    lv_image_set_rotation(ui->home_digital_img_1, 0);
+    lv_image_set_rotation(ui->home_digital_img_1, 10);
 
     //Write style for home_digital_img_1, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
     lv_obj_set_style_image_recolor_opa(ui->home_digital_img_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);

@@ -137,20 +137,20 @@ void setup_scr_screen_quick_config(lv_ui *ui)
     lv_label_set_long_mode(ui->screen_quick_config_label_backLight, LV_LABEL_LONG_WRAP);
 
     //Write style for screen_quick_config_label_backLight, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
-    lv_obj_set_style_bg_opa(ui->screen_quick_config_label_backLight, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui->screen_quick_config_label_backLight, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_radius(ui->screen_quick_config_label_backLight, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_width(ui->screen_quick_config_label_backLight, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_text_color(ui->screen_quick_config_label_backLight, lv_color_hex(0xffffff), LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui->screen_quick_config_label_backLight, &lv_font_ZiTiQuanWeiJunHeiW22_23, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui->screen_quick_config_label_backLight, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_text_letter_space(ui->screen_quick_config_label_backLight, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_text_line_space(ui->screen_quick_config_label_backLight, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_text_align(ui->screen_quick_config_label_backLight, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui->screen_quick_config_label_backLight, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_pad_top(ui->screen_quick_config_label_backLight, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_pad_right(ui->screen_quick_config_label_backLight, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_pad_bottom(ui->screen_quick_config_label_backLight, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_pad_left(ui->screen_quick_config_label_backLight, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui->screen_quick_config_label_backLight, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
 
     //Write codes screen_quick_config_btn_power
     ui->screen_quick_config_btn_power = lv_button_create(ui->screen_quick_config);
@@ -165,12 +165,12 @@ void setup_scr_screen_quick_config(lv_ui *ui)
 
     //Write style for screen_quick_config_btn_power, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
     lv_obj_set_style_bg_opa(ui->screen_quick_config_btn_power, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_border_width(ui->screen_quick_config_btn_power, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_radius(ui->screen_quick_config_btn_power, 5, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_width(ui->screen_quick_config_btn_power, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_src(ui->screen_quick_config_btn_power, &_turnoff_RGB565A8_50x50, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_opa(ui->screen_quick_config_btn_power, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_bg_image_recolor_opa(ui->screen_quick_config_btn_power, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_border_width(ui->screen_quick_config_btn_power, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_text_color(ui->screen_quick_config_btn_power, lv_color_hex(0xffffff), LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui->screen_quick_config_btn_power, &lv_font_montserratMedium_16, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui->screen_quick_config_btn_power, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
@@ -186,17 +186,17 @@ void setup_scr_screen_quick_config(lv_ui *ui)
     lv_bar_set_value(ui->screen_quick_config_bar_battery, 80, LV_ANIM_OFF);
 
     //Write style for screen_quick_config_bar_battery, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
-    lv_obj_set_style_radius(ui->screen_quick_config_bar_battery, 10, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui->screen_quick_config_bar_battery, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui->screen_quick_config_bar_battery, lv_color_hex(0xffffff), LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_bg_grad_dir(ui->screen_quick_config_bar_battery, LV_GRAD_DIR_NONE, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_radius(ui->screen_quick_config_bar_battery, 10, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_shadow_width(ui->screen_quick_config_bar_battery, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
 
     //Write style for screen_quick_config_bar_battery, Part: LV_PART_INDICATOR, State: LV_STATE_DEFAULT.
-    lv_obj_set_style_radius(ui->screen_quick_config_bar_battery, 10, LV_PART_INDICATOR|LV_STATE_DEFAULT);
     lv_obj_set_style_bg_opa(ui->screen_quick_config_bar_battery, 255, LV_PART_INDICATOR|LV_STATE_DEFAULT);
     lv_obj_set_style_bg_color(ui->screen_quick_config_bar_battery, lv_color_hex(0x00cc00), LV_PART_INDICATOR|LV_STATE_DEFAULT);
     lv_obj_set_style_bg_grad_dir(ui->screen_quick_config_bar_battery, LV_GRAD_DIR_NONE, LV_PART_INDICATOR|LV_STATE_DEFAULT);
+    lv_obj_set_style_radius(ui->screen_quick_config_bar_battery, 10, LV_PART_INDICATOR|LV_STATE_DEFAULT);
 
     //Write codes screen_quick_config_label_battery
     ui->screen_quick_config_label_battery = lv_label_create(ui->screen_quick_config);
@@ -206,20 +206,20 @@ void setup_scr_screen_quick_config(lv_ui *ui)
     lv_label_set_long_mode(ui->screen_quick_config_label_battery, LV_LABEL_LONG_WRAP);
 
     //Write style for screen_quick_config_label_battery, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
-    lv_obj_set_style_bg_opa(ui->screen_quick_config_label_battery, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_border_width(ui->screen_quick_config_label_battery, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_radius(ui->screen_quick_config_label_battery, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_shadow_width(ui->screen_quick_config_label_battery, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_text_color(ui->screen_quick_config_label_battery, lv_color_hex(0xffffff), LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_text_font(ui->screen_quick_config_label_battery, &lv_font_montserratMedium_16, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_text_opa(ui->screen_quick_config_label_battery, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_text_letter_space(ui->screen_quick_config_label_battery, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_text_line_space(ui->screen_quick_config_label_battery, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_text_align(ui->screen_quick_config_label_battery, LV_TEXT_ALIGN_CENTER, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_bg_opa(ui->screen_quick_config_label_battery, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_pad_top(ui->screen_quick_config_label_battery, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_pad_right(ui->screen_quick_config_label_battery, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_pad_bottom(ui->screen_quick_config_label_battery, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_pad_left(ui->screen_quick_config_label_battery, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_shadow_width(ui->screen_quick_config_label_battery, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
 
     //Write codes screen_quick_config_btn_1
     ui->screen_quick_config_btn_1 = lv_button_create(ui->screen_quick_config);

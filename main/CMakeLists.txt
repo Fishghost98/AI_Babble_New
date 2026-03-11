@@ -1,5 +1,6 @@
 # Define source files
 file(GLOB_RECURSE C_SOURCES ./display/*.c)
+file(GLOB_RECURSE C++_SOURCES ./display/*.cpp)
 set(SOURCES "audio/audio_codec.cc"
             "audio/audio_service.cc"
             "audio/codecs/no_audio_codec.cc"
@@ -26,8 +27,8 @@ set(SOURCES "audio/audio_codec.cc"
             "display/lvgl_display/gif/gifdec.c"
             "display/lvgl_display/jpg/image_to_jpeg.cpp"
             "display/lvgl_display/jpg/jpeg_to_image.c"
-            "display/custom/custom.c"
-            "display/generated/gui_guider.c"
+            "display/custom/custom.cpp"
+            "display/generated/gui_guider.cpp"
             "protocols/protocol.cc"
             "protocols/mqtt_protocol.cc"
             "protocols/websocket_protocol.cc"
@@ -41,10 +42,10 @@ set(SOURCES "audio/audio_codec.cc"
             "main.cc"
             )
 
-set(INCLUDE_DIRS "." "bable" "bable/PCF85063" "display" "display/lvgl_display" "display/lvgl_display/jpg" "display/custom" "display/generated" "display/generated/guider_customer_fonts" "audio" "protocols")
+set(INCLUDE_DIRS "." "babble" "display" "display/lvgl_display" "display/lvgl_display/jpg" "display/custom" "display/generated" "display/generated/guider_customer_fonts" "audio" "protocols")
 
 # Add board common files
-list(APPEND SOURCES
+list(APPEND SOURCES 
     "boards/common/board.cc"
     "boards/common/wifi_board.cc"
     "boards/common/ml307_board.cc"
@@ -797,7 +798,7 @@ if(CONFIG_IDF_TARGET_ESP32S3)
     list(APPEND SOURCES "boards/common/esp32_camera.cc")
 endif()
 
-idf_component_register(SRCS ${SOURCES} ${C_SOURCES}
+idf_component_register(SRCS ${SOURCES} ${C_SOURCES} ${C++_SOURCES}
                     EMBED_FILES ${LANG_SOUNDS} ${COMMON_SOUNDS}
                     INCLUDE_DIRS ${INCLUDE_DIRS}
                     WHOLE_ARCHIVE
