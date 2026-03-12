@@ -23,7 +23,7 @@
 #define LCD_OPCODE_WRITE_CMD (0x02ULL)
 #define LCD_OPCODE_READ_CMD (0x0BULL)
 #define LCD_OPCODE_WRITE_COLOR (0x32ULL)
-#define I2C_Touch_RST_IO            -1 
+#define I2C_Touch_RST_IO -1
 static const st77916_lcd_init_cmd_t vendor_specific_init_new[] = {
     {0xF0, (uint8_t[]){0x28}, 1, 0},
     {0xF2, (uint8_t[]){0x28}, 1, 0},
@@ -421,6 +421,88 @@ private:
         ESP_LOGI(TAG, "Touch panel initialized successfully");
     }
 
+    void InitializeSdCard() {
+#if SDCARD_SDMMC_ENABLED
+        sd_pwr_ctrl_handle_t sd_ldo = NULL;
+        sd_pwr_ctrl_ldo_config_t ldo_cfg = {.ldo_chan_id = 4};
+        if (sd_pwr_ctrl_new_on_chip_ldo(&ldo_cfg, &sd_ldo) == ESP_OK) {
+            ESP_LOGI(TAG, "SD LDO channel 4 enabled");
+        } else {
+            ESP_LOGW(TAG, "Failed to enable SD LDO channel 4");
+        }
+        sdmmc_host_t host = SDMMC_HOST_DEFAULT();
+        sdmmc_slot_config_t slot_config = SDMMC_SLOT_CONFIG_DEFAULT();
+        // Map pins via GPIO matrix if needed
+        slot_config.clk = SDCARD_SDMMC_CLK_PIN;
+        slot_config.cmd = SDCARD_SDMMC_CMD_PIN;
+        slot_config.d0 = SDCARD_SDMMC_D0_PIN;
+        slot_config.width = SDCARD_SDMMC_BUS_WIDTH;
+        if (SDCARD_SDMMC_BUS_WIDTH == 4) {
+            slot_config.d1 = SDCARD_SDMMC_D1_PIN;
+            slot_config.d2 = SDCARD_SDMMC_D2_PIN;
+            slot_config.d3 = SDCARD_SDMMC_D3_PIN;
+        }
+
+        esp_vfs_fat_sdmmc_mount_config_t mount_config = {
+            .format_if_mount_failed = false,
+            .max_files = 5,
+            .allocation_unit_size = 0,
+            .disk_status_check_enable = true,
+        };
+        sdmmc_card_t* card;
+        host.pwr_ctrl_handle = sd_ldo;
+        esp_err_t ret =
+            esp_vfs_fat_sdmmc_mount(SDCARD_MOUNT_POINT, &host, &slot_config, &mount_config, &card);
+        if (ret == ESP_OK) {
+            sdmmc_card_print_info(stdout, card);
+            ESP_LOGI(TAG, "SD card mounted at %s (SDMMC)", SDCARD_MOUNT_POINT);
+        } else {
+            ESP_LOGW(TAG, "Failed to mount SD card (SDMMC): %s", esp_err_to_name(ret));
+        }
+#elif SDCARD_SDSPI_ENABLED
+        sd_pwr_ctrl_handle_t sd_ldo = NULL;
+        sd_pwr_ctrl_ldo_config_t ldo_cfg = {.ldo_chan_id = 4};
+        if (sd_pwr_ctrl_new_on_chip_ldo(&ldo_cfg, &sd_ldo) == ESP_OK) {
+            ESP_LOGI(TAG, "SD LDO channel 4 enabled");
+        } else {
+            ESP_LOGW(TAG, "Failed to enable SD LDO channel 4");
+        }
+        sdmmc_host_t host = SDSPI_HOST_DEFAULT();
+        spi_bus_config_t bus_cfg = {
+            .mosi_io_num = SDCARD_SPI_MOSI,
+            .miso_io_num = SDCARD_SPI_MISO,
+            .sclk_io_num = SDCARD_SPI_SCLK,
+            .quadwp_io_num = -1,
+            .quadhd_io_num = -1,
+            .max_transfer_sz = 4000,
+        };
+        ESP_ERROR_CHECK_WITHOUT_ABORT(
+            spi_bus_initialize((spi_host_device_t)SDCARD_SPI_HOST, &bus_cfg, SPI_DMA_CH_AUTO));
+        sdspi_device_config_t slot_config = SDSPI_DEVICE_CONFIG_DEFAULT();
+        slot_config.gpio_cs = SDCARD_SPI_CS;
+        slot_config.host_id = (spi_host_device_t)SDCARD_SPI_HOST;
+
+        esp_vfs_fat_sdmmc_mount_config_t mount_config = {
+            .format_if_mount_failed = false,
+            .max_files = 5,
+            .allocation_unit_size = 0,
+            .disk_status_check_enable = true,
+        };
+        sdmmc_card_t* card;
+        host.pwr_ctrl_handle = sd_ldo;
+        esp_err_t ret =
+            esp_vfs_fat_sdspi_mount(SDCARD_MOUNT_POINT, &host, &slot_config, &mount_config, &card);
+        if (ret == ESP_OK) {
+            sdmmc_card_print_info(stdout, card);
+            ESP_LOGI(TAG, "SD card mounted at %s (SDSPI)", SDCARD_MOUNT_POINT);
+        } else {
+            ESP_LOGW(TAG, "Failed to mount SD card (SDSPI): %s", esp_err_to_name(ret));
+        }
+#else
+        ESP_LOGI(TAG, "SD card disabled (enable SDCARD_SDMMC_ENABLED or SDCARD_SDSPI_ENABLED)");
+#endif
+    }
+
     void InitializeButtons() {
         boot_button_.OnClick([this]() {
             auto& app = Application::GetInstance();
@@ -439,7 +521,9 @@ public:
         InitializeSpi();
         Initializest77916Display();
         InitializeTouch();
+        InitializeSdCard();
         InitializeButtons();
+
         GetBacklight()->RestoreBrightness();
     }
 

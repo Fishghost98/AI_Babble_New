@@ -36,7 +36,7 @@ void setup_scr_screen_clock(lv_ui *ui)
     lv_obj_set_pos(ui->screen_clock_img_1, 90, 70);
     lv_obj_set_size(ui->screen_clock_img_1, 180, 180);
     lv_obj_add_flag(ui->screen_clock_img_1, LV_OBJ_FLAG_CLICKABLE);
-    lv_image_set_src(ui->screen_clock_img_1, &_analog_img_RGB565A8_180x180_RLE);
+    lv_image_set_src(ui->screen_clock_img_1, &_analog_img_RGB565A8_180x180);
     lv_image_set_pivot(ui->screen_clock_img_1, 50,50);
     lv_image_set_rotation(ui->screen_clock_img_1, 0);
 

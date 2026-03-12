@@ -206,3 +206,74 @@ uint32_t millis(void) {
     // 获取系统启动以来的微秒数，转换为毫秒
     return (uint32_t)(esp_timer_get_time() / 1000);
 }
+
+void Flash_Searching(void)
+{
+    if (esp_flash_get_physical_size(NULL, &Flash_Size) == ESP_OK)
+    {
+        Flash_Size = Flash_Size / (uint32_t)(1024 * 1024);
+        printf("Flash size: %ld MB\n", Flash_Size);
+    }
+    else
+    {
+        printf("Get flash size failed\n");
+    }
+}
+
+// 读取SD卡中指定路径下指定类型文件
+uint16_t Read_File(const char *directory,  const char *fileExtension, char File_Name[][MAX_FILE_NAME_SIZE], uint16_t maxFiles)
+{
+    DIR *dir = opendir(directory);
+    if (dir == NULL)
+    {
+        ESP_LOGE(SD_TAG, "Path: <%s> does not exist", directory);
+        ESP_LOGE("SD_MMC", "opendir failed: errno=%d, 0x%x", errno, esp_err_to_name(errno));
+        return 0;
+    }
+
+    uint16_t fileCount = 0;
+    struct dirent *entry;
+
+    while ((entry = readdir(dir)) != NULL && fileCount < maxFiles)
+    {
+
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+        {
+            continue;
+        }
+
+        const char *dot = strrchr(entry->d_name, '.');
+        if (dot != NULL && dot != entry->d_name)
+        {
+
+            if (strcasecmp(dot, fileExtension) == 0)
+            {
+                strncpy(File_Name[fileCount], entry->d_name, MAX_FILE_NAME_SIZE - 1);
+                File_Name[fileCount][MAX_FILE_NAME_SIZE - 1] = '\0';
+
+                char filePath[MAX_PATH_SIZE];
+                snprintf(filePath, MAX_PATH_SIZE, "%s%s", directory, entry->d_name);
+
+                printf("File found: %s\r\n", filePath);
+                fileCount++;
+            }
+        }
+        else
+        {
+            // printf("No extension found for file: %s\r\n", entry->d_name);
+        }
+    }
+
+    closedir(dir);
+
+    if (fileCount > 0)
+    {
+        ESP_LOGI(SD_TAG, "Retrieved %d GIFs", fileCount);
+    }
+    else
+    {
+        ESP_LOGW(SD_TAG, "No gif found in directory: %s", directory);
+    }
+
+    return fileCount;
+}
