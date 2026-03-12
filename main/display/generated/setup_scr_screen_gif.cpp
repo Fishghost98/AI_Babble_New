@@ -43,6 +43,7 @@ void setup_scr_screen_gif(lv_ui *ui)
     //Write style for screen_gif_img_1, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
     lv_obj_set_style_image_recolor_opa(ui->screen_gif_img_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_image_opa(ui->screen_gif_img_1, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_radius(ui->screen_gif_img_1, 150, LV_STATE_DEFAULT);
 
     //Write codes screen_gif_label_1
     ui->screen_gif_label_1 = lv_label_create(ui->screen_gif);
