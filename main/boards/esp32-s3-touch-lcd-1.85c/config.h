@@ -63,5 +63,37 @@
         .max_transfer_sz = max_trans_sz,                                          \
     }
 
+    // SDMMC 1-bit/4-bit mode
+#ifndef SDCARD_SDMMC_ENABLED
+#define SDCARD_SDMMC_ENABLED            1
+#endif
+// SDMMC bus width: set to 1 or 4
+#ifndef SDCARD_SDMMC_BUS_WIDTH
+// Use 4-bit bus width when enabling SDMMC
+#define SDCARD_SDMMC_BUS_WIDTH          1
+#endif
+// SDMMC pin assignments (set to actual pins when enabling SDMMC)
+#ifndef SDCARD_SDMMC_CLK_PIN
+#define SDCARD_SDMMC_CLK_PIN            GPIO_NUM_14  // BSP_SD_CLK
+#endif
+#ifndef SDCARD_SDMMC_CMD_PIN
+#define SDCARD_SDMMC_CMD_PIN            GPIO_NUM_17  // BSP_SD_CMD
+#endif
+#ifndef SDCARD_SDMMC_D0_PIN
+#define SDCARD_SDMMC_D0_PIN             GPIO_NUM_16  // BSP_SD_D0
+#endif
+#ifndef SDCARD_SDMMC_D1_PIN
+#define SDCARD_SDMMC_D1_PIN             GPIO_NUM_NC  // BSP_SD_D1
+#endif
+#ifndef SDCARD_SDMMC_D2_PIN
+#define SDCARD_SDMMC_D2_PIN             GPIO_NUM_NC  // BSP_SD_D2
+#endif
+#ifndef SDCARD_SDMMC_D3_PIN
+#define SDCARD_SDMMC_D3_PIN             GPIO_NUM_NC  // BSP_SD_D3
+#endif
+
+#ifndef SDCARD_MOUNT_POINT
+#define SDCARD_MOUNT_POINT              "/sdcard"
+#endif
 
 #endif // _BOARD_CONFIG_H_

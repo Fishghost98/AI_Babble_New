@@ -13,6 +13,7 @@
 #include "Commons.h"
 #include "audio_codec.h"
 #include "board.h"
+#include "esp_log.h"
 #include "lvgl.h"
 #if LV_USE_GUIDER_SIMULATOR && LV_USE_FREEMASTER
 #include "freemaster_client.h"
@@ -552,6 +553,63 @@ static void screen_picture_display_event_handler(lv_event_t* e) {
                         LV_SCR_LOAD_ANIM_NONE, 200, 200, false, true);
                     break;
                 }
+                case LV_DIR_RIGHT: {
+                    lv_indev_wait_release(lv_indev_get_act());
+                    // 边界检查：无图片时直接返回
+                    if (all_config.pic_picture_length <= 0) {
+                        ESP_LOGW("event", "No pictures to display");
+                        break;
+                    }
+
+                    // 安全更新索引（避免负数）
+                    all_config.page_pic_display.pic_index--;
+                    if (all_config.page_pic_display.pic_index < 0) {
+                        all_config.page_pic_display.pic_index = all_config.pic_picture_length - 1;
+                    }
+                    snprintf(all_config.page_pic_display.pic_path_buf,
+                             sizeof(all_config.page_pic_display.pic_path_buf), "S:/pictures/%s",
+                             all_config.pics_picture[all_config.page_pic_display.pic_index]);
+                    lv_img_set_src(guider_ui.screen_picture_display_img_display,
+                                   all_config.page_pic_display.pic_path_buf);
+                    if (save_config.pic_display == all_config.page_pic_display.pic_index &&
+                        all_config.page_main.main_display_type == 0) {
+                        lv_label_set_text(guider_ui.screen_picture_display_list_1_item0, "已设置");
+                    } else {
+                        lv_label_set_text(guider_ui.screen_picture_display_list_1_item0, "设置");
+                    }
+                    ESP_LOGI("picture_display", "Display picture: %s; pic_index: %d",
+                             all_config.page_pic_display.pic_path_buf,
+                             all_config.page_pic_display.pic_index);
+                    break;
+                }
+                case LV_DIR_LEFT: {
+                    lv_indev_wait_release(lv_indev_get_act());
+                    // 边界检查：无图片时直接返回
+                    if (all_config.pic_picture_length <= 0) {
+                        ESP_LOGW("event", "No pictures to display");
+                        break;
+                    }
+
+                    // 安全更新索引（避免负数）
+                    all_config.page_pic_display.pic_index =
+                        (all_config.page_pic_display.pic_index + 1) % all_config.pic_picture_length;
+                    snprintf(all_config.page_pic_display.pic_path_buf,
+                             sizeof(all_config.page_pic_display.pic_path_buf), "S:/pictures/%s",
+                             all_config.pics_picture[all_config.page_pic_display.pic_index]);
+
+                    lv_img_set_src(guider_ui.screen_picture_display_img_display,
+                                   all_config.page_pic_display.pic_path_buf);
+                    if (save_config.pic_display == all_config.page_pic_display.pic_index &&
+                        all_config.page_main.main_display_type == 0) {
+                        lv_label_set_text(guider_ui.screen_picture_display_list_1_item0, "已设置");
+                    } else {
+                        lv_label_set_text(guider_ui.screen_picture_display_list_1_item0, "设置");
+                    }
+                    ESP_LOGI("picture_display", "Display picture: %s; pic_index: %d",
+                             all_config.page_pic_display.pic_path_buf,
+                             all_config.page_pic_display.pic_index);
+                    break;
+                }
                 default:
                     break;
             }
@@ -566,9 +624,15 @@ static void screen_picture_display_img_display_event_handler(lv_event_t* e) {
     lv_event_code_t code = lv_event_get_code(e);
     switch (code) {
         case LV_EVENT_CLICKED: {
+            lv_label_set_text(guider_ui.screen_picture_display_list_1_item0, "已设置");
+            save_config.main_display_type = all_config.page_main.main_display_type = 0;
+            save_config.pic_display = all_config.page_pic_display.pic_index;
+            ESP_LOGI("picture_display", "Set picture: %s",
+                     all_config.pics_picture[all_config.page_pic_display.pic_index]);
             ui_load_scr_animation(&guider_ui, &guider_ui.screen_main, guider_ui.screen_main_del,
                                   &guider_ui.screen_picture_display_del, setup_scr_screen_main,
-                                  LV_SCR_LOAD_ANIM_NONE, 200, 200, false, true);
+                                  LV_SCR_LOAD_ANIM_FADE_ON, 200, 200, false, true);
+            nvs_save_all_config();
             break;
         }
         default:
@@ -580,6 +644,15 @@ static void screen_picture_display_list_1_event_handler(lv_event_t* e) {
     lv_event_code_t code = lv_event_get_code(e);
     switch (code) {
         case LV_EVENT_CLICKED: {
+            lv_label_set_text(guider_ui.screen_picture_display_list_1_item0, "已设置");
+            save_config.main_display_type = all_config.page_main.main_display_type = 0;
+            save_config.pic_display = all_config.page_pic_display.pic_index;
+            ESP_LOGI("picture_display", "Set picture: %s",
+                     all_config.pics_picture[all_config.page_pic_display.pic_index]);
+            ui_load_scr_animation(&guider_ui, &guider_ui.screen_main, guider_ui.screen_main_del,
+                                  &guider_ui.screen_picture_display_del, setup_scr_screen_main,
+                                  LV_SCR_LOAD_ANIM_FADE_ON, 200, 200, false, true);
+            nvs_save_all_config();
             break;
         }
         default:
@@ -610,24 +683,66 @@ static void screen_gif_display_event_handler(lv_event_t* e) {
                                           LV_SCR_LOAD_ANIM_NONE, 200, 200, false, true);
                     break;
                 }
+                case LV_DIR_RIGHT: {
+                    lv_indev_wait_release(lv_indev_get_act());
+                    // 边界检查：无图片时直接返回
+                    if (all_config.pic_gif_length <= 0) {
+                        ESP_LOGW("event", "No gifs to display");
+                        break;
+                    }
+
+                    // 安全更新索引（避免负数）
+                    all_config.page_gif_display.gif_index--;
+                    if (all_config.page_gif_display.gif_index < 0) {
+                        all_config.page_gif_display.gif_index = all_config.pic_gif_length - 1;
+                    }
+                    snprintf(all_config.page_gif_display.gif_path_buf,
+                             sizeof(all_config.page_gif_display.gif_path_buf), "S:/gifs/%s",
+                             all_config.pics_gif[all_config.page_gif_display.gif_index]);
+
+                    lv_gif_set_src(guider_ui.screen_gif_display_img_display,
+                                   all_config.page_gif_display.gif_path_buf);
+                    if (save_config.gif_display == all_config.page_gif_display.gif_index &&
+                        all_config.page_main.main_display_type == 1) {
+                        lv_label_set_text(guider_ui.screen_gif_display_list_1_item0, "已设置");
+                    } else {
+                        lv_label_set_text(guider_ui.screen_gif_display_list_1_item0, "设置");
+                    }
+                    ESP_LOGI("gif_display", "Display picture: %s; pic_index: %d",
+                             all_config.page_gif_display.gif_path_buf,
+                             all_config.page_gif_display.gif_index);
+                    break;
+                }
+                case LV_DIR_LEFT: {
+                    lv_indev_wait_release(lv_indev_get_act());
+                    // 边界检查：无图片时直接返回
+                    if (all_config.pic_picture_length <= 0) {
+                        ESP_LOGW("event", "No pictures to display");
+                        break;
+                    }
+
+                    // 安全更新索引（避免负数）
+                    all_config.page_gif_display.gif_index =
+                        (all_config.page_gif_display.gif_index + 1) % all_config.pic_gif_length;
+                    snprintf(all_config.page_gif_display.gif_path_buf,
+                             sizeof(all_config.page_gif_display.gif_path_buf), "S:/gifs/%s",
+                             all_config.pics_gif[all_config.page_gif_display.gif_index]);
+                    lv_gif_set_src(guider_ui.screen_gif_display_img_display,
+                                   all_config.page_gif_display.gif_path_buf);
+                    if (save_config.gif_display == all_config.page_gif_display.gif_index &&
+                        all_config.page_main.main_display_type == 1) {
+                        lv_label_set_text(guider_ui.screen_gif_display_list_1_item0, "已设置");
+                    } else {
+                        lv_label_set_text(guider_ui.screen_gif_display_list_1_item0, "设置");
+                    }
+                    ESP_LOGI("gif_display", "Display picture: %s; pic_index: %d",
+                             all_config.page_gif_display.gif_path_buf,
+                             all_config.page_gif_display.gif_index);
+                    break;
+                }
                 default:
                     break;
             }
-            break;
-        }
-        default:
-            break;
-    }
-}
-
-static void screen_gif_display_img_display_event_handler(lv_event_t* e) {
-    lv_event_code_t code = lv_event_get_code(e);
-    switch (code) {
-        case LV_EVENT_CLICKED: {
-            ui_load_scr_animation(&guider_ui, &guider_ui.screen_main_gif,
-                                  guider_ui.screen_main_gif_del, &guider_ui.screen_gif_display_del,
-                                  setup_scr_screen_main_gif, LV_SCR_LOAD_ANIM_NONE, 200, 200, false,
-                                  true);
             break;
         }
         default:
@@ -639,6 +754,16 @@ static void screen_gif_display_list_1_event_handler(lv_event_t* e) {
     lv_event_code_t code = lv_event_get_code(e);
     switch (code) {
         case LV_EVENT_CLICKED: {
+            lv_label_set_text(guider_ui.screen_gif_display_list_1_item0, "已设置");
+            save_config.main_display_type = all_config.page_main.main_display_type = 1;
+            save_config.gif_display = all_config.page_gif_display.gif_index;
+            ESP_LOGI("gif_display", "Set gif: %s",
+                     all_config.pics_gif[all_config.page_main.pic_main_index]);
+            ui_load_scr_animation(&guider_ui, &guider_ui.screen_main_gif,
+                                  guider_ui.screen_main_gif_del, &guider_ui.screen_gif_display_del,
+                                  setup_scr_screen_main_gif, LV_SCR_LOAD_ANIM_FADE_ON, 200, 200,
+                                  false, true);
+            nvs_save_all_config();
             break;
         }
         default:
@@ -648,8 +773,6 @@ static void screen_gif_display_list_1_event_handler(lv_event_t* e) {
 
 void events_init_screen_gif_display(lv_ui* ui) {
     lv_obj_add_event_cb(ui->screen_gif_display, screen_gif_display_event_handler, LV_EVENT_ALL, ui);
-    lv_obj_add_event_cb(ui->screen_gif_display_img_display,
-                        screen_gif_display_img_display_event_handler, LV_EVENT_ALL, ui);
     lv_obj_add_event_cb(ui->screen_gif_display_list_1, screen_gif_display_list_1_event_handler,
                         LV_EVENT_ALL, ui);
 }
@@ -718,9 +841,10 @@ static void screen_clock_event_handler(lv_event_t* e) {
     switch (code) {
         case LV_EVENT_CLICKED: {
             lv_indev_wait_release(lv_indev_active());
-            ui_load_scr_animation(&guider_ui, &guider_ui.screen_clock_display, guider_ui.screen_clock_display_del,
-                                  &guider_ui.screen_clock_del, setup_scr_screen_gif,
-                                  LV_SCR_LOAD_ANIM_NONE, 200, 200, false, true);
+            ui_load_scr_animation(&guider_ui, &guider_ui.screen_clock_display,
+                                  guider_ui.screen_clock_display_del, &guider_ui.screen_clock_del,
+                                  setup_scr_screen_gif, LV_SCR_LOAD_ANIM_NONE, 200, 200, false,
+                                  true);
             break;
         }
         case LV_EVENT_GESTURE: {
@@ -1239,6 +1363,53 @@ static void screen_main_event_handler(lv_event_t* e) {
                                           LV_SCR_LOAD_ANIM_NONE, 200, 200, false, true);
                     break;
                 }
+                case LV_DIR_RIGHT: {
+                    lv_indev_wait_release(lv_indev_get_act());
+                    // 边界检查：无图片时直接返回
+                    if (all_config.pic_picture_length <= 0) {
+                        ESP_LOGW("event", "No pictures to display");
+                        break;
+                    }
+
+                    // 安全更新索引（避免负数）
+                    all_config.page_main.pic_main_index--;
+                    if (all_config.page_main.pic_main_index < 0) {
+                        all_config.page_main.pic_main_index = all_config.pic_picture_length - 1;
+                    }
+                    int pic_index = all_config.page_main.pic_main_index;
+
+                    static char g_pic_path_buf[356] = {0};
+                    snprintf(g_pic_path_buf, sizeof(g_pic_path_buf), "S:/pictures/%s",
+                             all_config.pics_picture[pic_index]);
+                    lv_img_set_src(guider_ui.screen_main_img_index, g_pic_path_buf);
+                    lv_obj_align(guider_ui.screen_main_img_index, LV_ALIGN_CENTER, 0, 0);
+                    ESP_LOGI("events_init", "Display picture: %s; pic_index: %d", g_pic_path_buf,
+                             pic_index);
+                    break;
+                }
+                case LV_DIR_LEFT: {
+                    lv_indev_wait_release(lv_indev_get_act());
+                    // 边界检查：无图片时直接返回
+                    if (all_config.pic_picture_length <= 0) {
+                        ESP_LOGW("event", "No pictures to display");
+                        break;
+                    }
+
+                    // 安全更新索引（避免负数）
+                    all_config.page_main.pic_main_index =
+                        (all_config.page_main.pic_main_index + 1) % all_config.pic_picture_length;
+                    int pic_index = all_config.page_main.pic_main_index;
+
+                    static char g_pic_path_buf[356] = {0};
+                    snprintf(g_pic_path_buf, sizeof(g_pic_path_buf), "S:/pictures/%s",
+                             all_config.pics_picture[pic_index]);
+
+                    lv_img_set_src(guider_ui.screen_main_img_index, g_pic_path_buf);
+                    lv_obj_align(guider_ui.screen_main_img_index, LV_ALIGN_CENTER, 0, 0);
+                    ESP_LOGI("events_init", "Display picture: %s; pic_index: %d", g_pic_path_buf,
+                             pic_index);
+                    break;
+                }
                 default:
                     break;
             }
@@ -1274,6 +1445,78 @@ static void screen_main_gif_event_handler(lv_event_t* e) {
                                           &guider_ui.screen_main_gif_del,
                                           setup_scr_screen_quick_config, LV_SCR_LOAD_ANIM_NONE, 200,
                                           200, false, true);
+                    break;
+                }
+                case LV_DIR_RIGHT: {
+                    lv_indev_wait_release(lv_indev_get_act());
+                    // 边界检查：无图片时直接返回
+                    if (all_config.pic_gif_length <= 0) {
+                        ESP_LOGW("event", "No gifs to display");
+                        break;
+                    }
+
+                    // 安全更新索引（避免负数）
+                    all_config.page_main.pic_main_index--;
+                    if (all_config.page_main.pic_main_index < 0) {
+                        all_config.page_main.pic_main_index = all_config.pic_gif_length - 1;
+                    }
+                    int pic_index = all_config.page_main.pic_main_index;
+
+                    static char g_pic_path_buf[356] = {0};
+                    snprintf(g_pic_path_buf, sizeof(g_pic_path_buf), "S:/gifs/%s",
+                             all_config.pics_gif[pic_index]);
+
+                    // ===== 新增：LVGL 文件操作排查 =====
+                    lv_fs_file_t file;
+                    lv_fs_res_t res = lv_fs_open(&file, g_pic_path_buf, LV_FS_MODE_RD);
+                    if (res != LV_FS_RES_OK) {
+                        ESP_LOGE("LVGL_FS", "LVGL 打开文件失败！路径：%s，错误码：%d",
+                                 g_pic_path_buf, res);
+                        // 错误码含义：LV_FS_RES_NOT_EXIST=2（路径/文件不存在）、LV_FS_RES_INV_PATH=3（路径格式错误）等
+                        break;
+                    }
+                    ESP_LOGI("LVGL_FS", "LVGL 成功打开文件：%s", g_pic_path_buf);
+                    lv_fs_close(&file);
+
+                    lv_gif_set_src(guider_ui.screen_main_gif_gif_index, g_pic_path_buf);
+                    lv_obj_align(guider_ui.screen_main_gif_gif_index, LV_ALIGN_CENTER, 0, 0);
+                    ESP_LOGI("screen_main_gif", "Display gif: %s; pic_index: %d", g_pic_path_buf,
+                             pic_index);
+                    break;
+                }
+                case LV_DIR_LEFT: {
+                    lv_indev_wait_release(lv_indev_get_act());
+                    // 边界检查：无图片时直接返回
+                    if (all_config.pic_gif_length <= 0) {
+                        ESP_LOGW("event", "No gifs to display");
+                        break;
+                    }
+
+                    // 安全更新索引（避免负数）
+                    all_config.page_main.pic_main_index =
+                        (all_config.page_main.pic_main_index + 1) % all_config.pic_gif_length;
+                    int pic_index = all_config.page_main.pic_main_index;
+
+                    static char g_pic_path_buf[356] = {0};
+                    snprintf(g_pic_path_buf, sizeof(g_pic_path_buf), "S:/gifs/%s",
+                             all_config.pics_gif[pic_index]);
+
+                    // ===== 新增：LVGL 文件操作排查 =====
+                    lv_fs_file_t file;
+                    lv_fs_res_t res = lv_fs_open(&file, g_pic_path_buf, LV_FS_MODE_RD);
+                    if (res != LV_FS_RES_OK) {
+                        ESP_LOGE("LVGL_FS", "LVGL 打开文件失败！路径：%s，错误码：%d",
+                                 g_pic_path_buf, res);
+                        // 错误码含义：LV_FS_RES_NOT_EXIST=2（路径/文件不存在）、LV_FS_RES_INV_PATH=3（路径格式错误）等
+                        break;
+                    }
+                    ESP_LOGI("LVGL_FS", "LVGL 成功打开文件：%s", g_pic_path_buf);
+                    lv_fs_close(&file);
+
+                    lv_gif_set_src(guider_ui.screen_main_gif_gif_index, g_pic_path_buf);
+                    lv_obj_align(guider_ui.screen_main_gif_gif_index, LV_ALIGN_CENTER, 0, 0);
+                    ESP_LOGI("screen_main_gif", "Display gif: %s; pic_index: %d", g_pic_path_buf,
+                             pic_index);
                     break;
                 }
                 default:

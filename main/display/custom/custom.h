@@ -14,6 +14,8 @@ extern "C" {
 #endif
 
 #include "gui_guider.h"
+#include "Commons.h"
+#include "esp_log.h"
 
 void custom_init(lv_ui *ui);
 

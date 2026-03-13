@@ -196,10 +196,10 @@ typedef struct
 	lv_obj_t *home_digital_label_hour;
 	lv_obj_t *screen_main;
 	bool screen_main_del;
-	lv_obj_t *screen_main_img_1;
+	lv_obj_t *screen_main_img_index;
 	lv_obj_t *screen_main_gif;
 	bool screen_main_gif_del;
-	lv_obj_t *screen_main_gif_img_1;
+	lv_obj_t *screen_main_gif_gif_index;
 	lv_obj_t *screen_chatDetail;
 	bool screen_chatDetail_del;
 	lv_obj_t *screen_chatDetail_label_chat;

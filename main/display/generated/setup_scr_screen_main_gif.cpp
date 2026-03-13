@@ -28,17 +28,18 @@ void setup_scr_screen_main_gif(lv_ui *ui)
     lv_obj_set_style_bg_color(ui->screen_main_gif, lv_color_hex(0x000000), LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_obj_set_style_bg_grad_dir(ui->screen_main_gif, LV_GRAD_DIR_NONE, LV_PART_MAIN|LV_STATE_DEFAULT);
 
-    //Write codes screen_main_gif_img_1
-    ui->screen_main_gif_img_1 = lv_image_create(ui->screen_main_gif);
-    lv_obj_set_pos(ui->screen_main_gif_img_1, 0, 0);
-    lv_obj_set_size(ui->screen_main_gif_img_1, 360, 360);
-    lv_obj_add_flag(ui->screen_main_gif_img_1, LV_OBJ_FLAG_CLICKABLE);
-    lv_image_set_pivot(ui->screen_main_gif_img_1, 50,50);
-    lv_image_set_rotation(ui->screen_main_gif_img_1, 0);
+    //Write codes screen_main_gif_gif_index
+    ui->screen_main_gif_gif_index = lv_gif_create(ui->screen_main_gif);
+    lv_obj_set_pos(ui->screen_main_gif_gif_index, 0, 0);
+    lv_obj_set_size(ui->screen_main_gif_gif_index, 360, 360);
+    lv_obj_add_flag(ui->screen_main_gif_gif_index, LV_OBJ_FLAG_CLICKABLE);
+    lv_gif_set_src(ui->screen_main_gif_gif_index, all_config.page_gif_display.gif_path_buf);
+    ESP_LOGI("main_gif", "Display gif: %s; gif_index: %d", all_config.page_gif_display.gif_path_buf, save_config.gif_display);
+    lv_obj_align(ui->screen_main_gif_gif_index, LV_ALIGN_CENTER, 0, 0);
 
-    //Write style for screen_main_gif_img_1, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
-    lv_obj_set_style_image_recolor_opa(ui->screen_main_gif_img_1, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
-    lv_obj_set_style_image_opa(ui->screen_main_gif_img_1, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
+    //Write style for screen_main_gif_gif_index, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
+    lv_obj_set_style_image_recolor_opa(ui->screen_main_gif_gif_index, 0, LV_PART_MAIN|LV_STATE_DEFAULT);
+    lv_obj_set_style_image_opa(ui->screen_main_gif_gif_index, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
 
     //The custom code of screen_main_gif.
 

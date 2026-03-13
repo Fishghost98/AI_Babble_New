@@ -4,11 +4,19 @@
 #include "driver/gpio.h"
 #include "driver/rtc_io.h"
 #include "esp_log.h"
+#include <errno.h>
+#include "dirent.h"
 #include "esp_sleep.h"
+#include "esp_flash.h" 
+#include "sdmmc_cmd.h"
+#include "driver/sdmmc_host.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
 #define TAG "Commons"
+
+uint32_t Flash_Size = 0;
+uint32_t SDCard_Size = 0;
 
 // #define testBoard 1
 // 配置唤醒引脚
@@ -220,13 +228,14 @@ void Flash_Searching(void)
     }
 }
 
+#define MAX_PATH_SIZE 512 
 // 读取SD卡中指定路径下指定类型文件
-uint16_t Read_File(const char *directory,  const char *fileExtension, char File_Name[][MAX_FILE_NAME_SIZE], uint16_t maxFiles)
+int Read_GIF(const char *directory, char File_Name[][MAX_FILE_NAME_SIZE], int maxFiles)
 {
     DIR *dir = opendir(directory);
     if (dir == NULL)
     {
-        ESP_LOGE(SD_TAG, "Path: <%s> does not exist", directory);
+        ESP_LOGE("SD_MMC", "Path: <%s> does not exist", directory);
         ESP_LOGE("SD_MMC", "opendir failed: errno=%d, 0x%x", errno, esp_err_to_name(errno));
         return 0;
     }
@@ -246,7 +255,64 @@ uint16_t Read_File(const char *directory,  const char *fileExtension, char File_
         if (dot != NULL && dot != entry->d_name)
         {
 
-            if (strcasecmp(dot, fileExtension) == 0)
+            if (strcasecmp(dot, ".gif") == 0)
+            {
+                strncpy(File_Name[fileCount], entry->d_name, MAX_FILE_NAME_SIZE - 1);
+                File_Name[fileCount][MAX_FILE_NAME_SIZE - 1] = '\0';
+
+                char filePath[MAX_PATH_SIZE];
+                snprintf(filePath, MAX_PATH_SIZE, "%s%s", directory, entry->d_name);
+
+                printf("File found: %s\r\n", filePath);
+                fileCount++;
+            }
+        }
+        else
+        {
+
+            // printf("No extension found for file: %s\r\n", entry->d_name);
+        }
+    }
+
+    closedir(dir);
+
+    if (fileCount > 0)
+    {
+        ESP_LOGI("SD_MMC", "Retrieved %d GIFs", fileCount);
+    }
+    else
+    {
+        ESP_LOGW("SD_MMC", "No gif found in directory: %s", directory);
+    }
+
+    return fileCount;
+}
+
+int Read_Picture(const char *directory, char File_Name[][MAX_FILE_NAME_SIZE], int maxFiles)
+{
+    DIR *dir = opendir(directory);
+    if (dir == NULL)
+    {
+        ESP_LOGE("SD_MMC", "Path: <%s> does not exist", directory);
+        return 0;
+    }
+
+    uint16_t fileCount = 0;
+    struct dirent *entry;
+
+    while ((entry = readdir(dir)) != NULL && fileCount < maxFiles)
+    {
+
+        if (strcmp(entry->d_name, ".") == 0 || strcmp(entry->d_name, "..") == 0)
+        {
+            continue;
+        }
+
+        const char *dot = strrchr(entry->d_name, '.');
+        if (dot != NULL && dot != entry->d_name)
+        {
+
+            if (strcasecmp(dot, ".png") == 0 || strcasecmp(dot, ".bmp") == 0 || strcasecmp(dot, ".jpg") == 0)
             {
                 strncpy(File_Name[fileCount], entry->d_name, MAX_FILE_NAME_SIZE - 1);
                 File_Name[fileCount][MAX_FILE_NAME_SIZE - 1] = '\0';
@@ -268,11 +334,11 @@ uint16_t Read_File(const char *directory,  const char *fileExtension, char File_
 
     if (fileCount > 0)
     {
-        ESP_LOGI(SD_TAG, "Retrieved %d GIFs", fileCount);
+        ESP_LOGI("SD_MMC", "Retrieved %d pictures", fileCount);
     }
     else
     {
-        ESP_LOGW(SD_TAG, "No gif found in directory: %s", directory);
+        ESP_LOGW("SD_MMC", "No picture found in directory: %s", directory);
     }
 
     return fileCount;

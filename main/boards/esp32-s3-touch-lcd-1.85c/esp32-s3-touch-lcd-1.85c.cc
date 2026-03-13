@@ -1,11 +1,3 @@
-#include "application.h"
-#include "button.h"
-#include "codecs/no_audio_codec.h"
-#include "config.h"
-#include "display/lcd_display.h"
-#include "system_reset.h"
-#include "wifi_board.h"
-
 #include <driver/i2c_master.h>
 #include <driver/ledc.h>
 #include <esp_lcd_panel_io.h>
@@ -15,8 +7,24 @@
 #include <esp_log.h>
 #include <esp_lvgl_port.h>
 #include <esp_timer.h>
+#include "Commons.h"
+#include "application.h"
+#include "button.h"
+#include "codecs/no_audio_codec.h"
+#include "config.h"
+#include "display/lcd_display.h"
+
+#include <esp_vfs_fat.h>
+#include <sdmmc_cmd.h>
+#include <driver/sdmmc_host.h>
+#include <driver/sdspi_host.h>
+#include "sd_pwr_ctrl_by_on_chip_ldo.h"
+
 #include "esp_io_expander_tca9554.h"
 #include "i2c_device.h"
+#include "system_reset.h"
+#include "wifi_board.h"
+
 
 #define TAG "waveshare_lcd_1_85c"
 
@@ -425,11 +433,11 @@ private:
 #if SDCARD_SDMMC_ENABLED
         sd_pwr_ctrl_handle_t sd_ldo = NULL;
         sd_pwr_ctrl_ldo_config_t ldo_cfg = {.ldo_chan_id = 4};
-        if (sd_pwr_ctrl_new_on_chip_ldo(&ldo_cfg, &sd_ldo) == ESP_OK) {
-            ESP_LOGI(TAG, "SD LDO channel 4 enabled");
-        } else {
-            ESP_LOGW(TAG, "Failed to enable SD LDO channel 4");
-        }
+        // if (sd_pwr_ctrl_new_on_chip_ldo(&ldo_cfg, &sd_ldo) == ESP_OK) {
+        //     ESP_LOGI(TAG, "SD LDO channel 4 enabled");
+        // } else {
+        //     ESP_LOGW(TAG, "Failed to enable SD LDO channel 4");
+        // }
         sdmmc_host_t host = SDMMC_HOST_DEFAULT();
         sdmmc_slot_config_t slot_config = SDMMC_SLOT_CONFIG_DEFAULT();
         // Map pins via GPIO matrix if needed
@@ -459,6 +467,7 @@ private:
         } else {
             ESP_LOGW(TAG, "Failed to mount SD card (SDMMC): %s", esp_err_to_name(ret));
         }
+        sdmmc_card_print_info(stdout, card);
 #elif SDCARD_SDSPI_ENABLED
         sd_pwr_ctrl_handle_t sd_ldo = NULL;
         sd_pwr_ctrl_ldo_config_t ldo_cfg = {.ldo_chan_id = 4};
@@ -514,6 +523,22 @@ private:
         });
     }
 
+    void Driver_Init() {
+        // 初始化NVS
+        if (!nvs_config_init()) {
+            ESP_LOGE("MAIN", "NVS初始化失败，使用默认配置");
+        }
+
+        Flash_Searching();
+        all_config.pic_picture_length =
+            Read_Picture("/sdcard/pictures/", all_config.pics_picture, 100);
+        all_config.pic_gif_length = Read_GIF("/sdcard/gifs/", all_config.pics_gif, 100);
+        // 从NVS加载配置（无配置则使用默认值）
+        nvs_load_all_config();
+        GetBacklight()->SetBrightness(all_config.page_quickConfig.backLight);
+        GetAudioCodec()->SetOutputVolume(all_config.page_quickConfig.volume);
+    }
+
 public:
     CustomBoard() : boot_button_(BOOT_BUTTON_GPIO) {
         InitializeI2c();
@@ -523,8 +548,7 @@ public:
         InitializeTouch();
         InitializeSdCard();
         InitializeButtons();
-
-        GetBacklight()->RestoreBrightness();
+        Driver_Init();
     }
 
     virtual AudioCodec* GetAudioCodec() override {

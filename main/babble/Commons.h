@@ -15,6 +15,7 @@
 #define power_ctrl GPIO_NUM_12
 // NVS配置存储的命名空间
 #define NVS_CONFIG_NAMESPACE "app_config"
+#define MAX_FILE_NAME_SIZE 300 // Define maximum file name size
 
 #define pic_png 0
 #define pic_bmp 1
@@ -50,7 +51,9 @@ void deep_sleep_rtc(uint64_t delay_ms);
 
 uint32_t millis(void);
 
-
+void Flash_Searching(void);
+int Read_Picture(const char *directory, char File_Name[][MAX_FILE_NAME_SIZE], int maxFiles);
+int Read_GIF(const char *directory, char File_Name[][MAX_FILE_NAME_SIZE], int maxFiles);
 
 typedef struct{
     struct 

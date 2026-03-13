@@ -34,7 +34,7 @@ void setup_scr_screen_quick_config(lv_ui *ui)
     lv_obj_set_size(ui->screen_quick_config_slider_volume, 50, 160);
     lv_slider_set_range(ui->screen_quick_config_slider_volume, 0, 100);
     lv_slider_set_mode(ui->screen_quick_config_slider_volume, LV_SLIDER_MODE_NORMAL);
-    lv_slider_set_value(ui->screen_quick_config_slider_volume, 50, LV_ANIM_OFF);
+    lv_slider_set_value(ui->screen_quick_config_slider_volume, all_config.page_quickConfig.volume, LV_ANIM_OFF);
 
     //Write style for screen_quick_config_slider_volume, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
     lv_obj_set_style_bg_opa(ui->screen_quick_config_slider_volume, 117, LV_PART_MAIN|LV_STATE_DEFAULT);
@@ -60,7 +60,7 @@ void setup_scr_screen_quick_config(lv_ui *ui)
     lv_obj_set_size(ui->screen_quick_config_slider_backLight, 50, 160);
     lv_slider_set_range(ui->screen_quick_config_slider_backLight, 10, 100);
     lv_slider_set_mode(ui->screen_quick_config_slider_backLight, LV_SLIDER_MODE_NORMAL);
-    lv_slider_set_value(ui->screen_quick_config_slider_backLight, 70, LV_ANIM_OFF);
+    lv_slider_set_value(ui->screen_quick_config_slider_backLight, all_config.page_quickConfig.backLight, LV_ANIM_OFF);
 
     //Write style for screen_quick_config_slider_backLight, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
     lv_obj_set_style_bg_opa(ui->screen_quick_config_slider_backLight, 121, LV_PART_MAIN|LV_STATE_DEFAULT);
@@ -183,7 +183,7 @@ void setup_scr_screen_quick_config(lv_ui *ui)
     lv_obj_set_style_anim_duration(ui->screen_quick_config_bar_battery, 1000, 0);
     lv_bar_set_mode(ui->screen_quick_config_bar_battery, LV_BAR_MODE_NORMAL);
     lv_bar_set_range(ui->screen_quick_config_bar_battery, 0, 100);
-    lv_bar_set_value(ui->screen_quick_config_bar_battery, 80, LV_ANIM_OFF);
+    lv_bar_set_value(ui->screen_quick_config_bar_battery, all_config.page_quickConfig.battery, LV_ANIM_OFF);
 
     //Write style for screen_quick_config_bar_battery, Part: LV_PART_MAIN, State: LV_STATE_DEFAULT.
     lv_obj_set_style_bg_opa(ui->screen_quick_config_bar_battery, 255, LV_PART_MAIN|LV_STATE_DEFAULT);
@@ -200,6 +200,12 @@ void setup_scr_screen_quick_config(lv_ui *ui)
 
     //Write codes screen_quick_config_label_battery
     ui->screen_quick_config_label_battery = lv_label_create(ui->screen_quick_config);
+    static char battery_buf[20] = {0};
+    snprintf(battery_buf, sizeof(battery_buf),
+             "%d%%",
+             all_config.page_quickConfig.battery);
+    ESP_LOGI("screen_quick_config", "battery:%d", all_config.page_quickConfig.battery);
+    lv_label_set_text(ui->screen_quick_config_label_battery, battery_buf);
     lv_obj_set_pos(ui->screen_quick_config_label_battery, 153, 25);
     lv_obj_set_size(ui->screen_quick_config_label_battery, 50, 16);
     lv_label_set_text(ui->screen_quick_config_label_battery, "80%");
